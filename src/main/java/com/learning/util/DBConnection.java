@@ -5,19 +5,22 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static String URL = "jdbc:postgresql://localhost:5432/expense-tracker";
-    private static String USER = "admin";
-    private static String PASS = "12345";
+    // Defaults work locally; override with environment variables when deploying.
+    private static final String URL  = env("DB_URL",  "jdbc:postgresql://localhost:5432/expense_tracker");
+    private static final String USER = env("DB_USER", "admin");
+    private static final String PASS = env("DB_PASS", "12345");
+
+    private static String env(String key, String fallback) {
+        String value = System.getenv(key);
+        return (value == null || value.isBlank()) ? fallback : value;
+    }
 
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("org.postgresql.Driver");
-
-        } catch (Exception e) {
-            System.err.println("PostgreSQL Driver not found!");
-            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("PostgreSQL driver not found", e);
         }
-
         return DriverManager.getConnection(URL, USER, PASS);
     }
 }

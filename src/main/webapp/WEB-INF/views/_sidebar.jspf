@@ -1,0 +1,29 @@
+<%-- Static include. The parent page declares the JSTL "c" taglib and sets "active". --%>
+<aside class="sidebar card">
+  <div>
+    <div class="profile">
+      <c:choose>
+        <c:when test="${not empty user.profileImage}">
+          <img class="avatar" src="<c:out value='${user.profileImage}'/>" alt="avatar">
+        </c:when>
+        <c:otherwise>
+          <div class="avatar initial"><c:out value="${user.initial}"/></div>
+        </c:otherwise>
+      </c:choose>
+      <div>
+        <h2><c:out value="${user.name}"/></h2>
+        <span class="muted">Money Track</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="${pageContext.request.contextPath}/dashboard" class="${active == 'dashboard' ? 'active' : ''}">📈 Dashboard</a>
+      <a href="${pageContext.request.contextPath}/incomes"   class="${active == 'incomes'   ? 'active' : ''}">💰 Incomes</a>
+      <a href="${pageContext.request.contextPath}/expenses"  class="${active == 'expenses'  ? 'active' : ''}">💸 Expenses</a>
+    </nav>
+  </div>
+
+  <form action="${pageContext.request.contextPath}/logout" method="post">
+    <button type="submit" class="link-btn">⇦ Sign Out</button>
+  </form>
+</aside>
